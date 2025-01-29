@@ -32,23 +32,41 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-gradient-to-br from-[#F8FAFC] via-[#E5DEFF] to-[#D3E4FD] min-h-screen text-foreground;
   }
 }
 
 .quadrant {
-  @apply p-4 rounded-lg bg-white shadow-lg transition-all duration-300;
-}
-
-.quadrant:hover {
-  @apply shadow-xl;
+  @apply p-6 rounded-xl bg-white/60 backdrop-blur-md shadow-lg 
+         border border-white/20 transition-all duration-300
+         hover:shadow-xl hover:bg-white/70;
 }
 
 .task-card {
-  @apply p-3 mb-2 bg-white rounded-md shadow border border-gray-100 cursor-move 
-         transition-all duration-200 hover:shadow-md;
+  @apply p-4 mb-3 rounded-lg cursor-move 
+         bg-white/80 backdrop-blur-sm
+         border border-white/40 shadow-sm
+         transition-all duration-300 
+         hover:shadow-md hover:scale-[1.02]
+         active:scale-95;
 }
 
 .task-card.dragging {
-  @apply opacity-50 scale-105;
+  @apply opacity-70 scale-105 rotate-2 shadow-xl;
+}
+
+.logo-animation {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
 }

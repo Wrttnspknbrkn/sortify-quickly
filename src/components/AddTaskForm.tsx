@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Plus } from "lucide-react";
 
 interface AddTaskFormProps {
   onAddTask: (content: string) => void;
@@ -18,15 +19,17 @@ const AddTaskForm = ({ onAddTask }: AddTaskFormProps) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex gap-2 mb-8">
+    <form onSubmit={handleSubmit} className="flex gap-3 mb-8 p-4 rounded-xl bg-white/60 backdrop-blur-sm shadow-sm">
       <Input
         type="text"
         value={content}
         onChange={(e) => setContent(e.target.value)}
         placeholder="Add a new task..."
-        className="flex-1"
+        className="flex-1 bg-white/80 border-white/40"
       />
-      <Button type="submit">Add</Button>
+      <Button type="submit" className="gap-2">
+        <Plus size={16} /> Add
+      </Button>
     </form>
   );
 };

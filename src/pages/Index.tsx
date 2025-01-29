@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
+import { Layers } from "lucide-react";
 import Quadrant from "@/components/Quadrant";
 import AddTaskForm from "@/components/AddTaskForm";
 
@@ -79,12 +80,21 @@ const Index = () => {
     tasks.filter(task => task.quadrant === quadrant);
 
   return (
-    <div className="min-h-screen p-6 bg-background">
+    <div className="min-h-screen p-6 bg-gradient-to-br from-[#F8FAFC] via-[#E5DEFF] to-[#D3E4FD]">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-4xl font-bold text-primary mb-8">QuickSort-It</h1>
-        <p className="text-lg text-muted-foreground mb-8">
-          Declutter your life, one decision at a time.
-        </p>
+        <div className="flex items-center justify-center gap-3 mb-8">
+          <div className="logo-animation">
+            <Layers size={48} className="text-primary" />
+          </div>
+          <div>
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              QuickSort-It
+            </h1>
+            <p className="text-lg text-muted-foreground">
+              Declutter your life, one decision at a time
+            </p>
+          </div>
+        </div>
         
         <AddTaskForm onAddTask={addTask} />
         

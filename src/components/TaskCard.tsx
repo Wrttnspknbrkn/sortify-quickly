@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { cn } from "@/lib/utils";
+import { X } from "lucide-react";
 
 interface TaskCardProps {
   id: string;
@@ -26,17 +27,19 @@ const TaskCard = ({ id, content, onDragStart, onDelete }: TaskCardProps) => {
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
       className={cn(
-        "task-card",
+        "task-card group",
         isDragging && "dragging"
       )}
     >
-      <div className="flex justify-between items-center">
-        <span>{content}</span>
+      <div className="flex justify-between items-center gap-2">
+        <span className="flex-1">{content}</span>
         <button
           onClick={() => onDelete(id)}
-          className="text-gray-400 hover:text-destructive transition-colors"
+          className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-destructive 
+                   transition-all duration-200 p-1 rounded-full hover:bg-destructive/10"
+          aria-label="Delete task"
         >
-          ×
+          <X size={16} />
         </button>
       </div>
     </div>
