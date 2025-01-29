@@ -37,9 +37,26 @@
 }
 
 .quadrant {
-  @apply p-6 rounded-xl bg-white/60 backdrop-blur-md shadow-lg 
+  @apply p-6 rounded-xl shadow-lg 
          border border-white/20 transition-all duration-300
-         hover:shadow-xl hover:bg-white/70;
+         hover:shadow-xl backdrop-blur-md;
+}
+
+/* Different gradient backgrounds for each quadrant */
+.quadrant:nth-of-type(1) {
+  @apply bg-gradient-to-br from-red-500/10 via-white/60 to-orange-500/10;
+}
+
+.quadrant:nth-of-type(2) {
+  @apply bg-gradient-to-br from-blue-500/10 via-white/60 to-purple-500/10;
+}
+
+.quadrant:nth-of-type(3) {
+  @apply bg-gradient-to-br from-yellow-500/10 via-white/60 to-green-500/10;
+}
+
+.quadrant:nth-of-type(4) {
+  @apply bg-gradient-to-br from-pink-500/10 via-white/60 to-indigo-500/10;
 }
 
 .task-card {
@@ -52,7 +69,10 @@
 }
 
 .task-card.dragging {
-  @apply opacity-70 scale-105 rotate-2 shadow-xl;
+  @apply opacity-90 scale-110 rotate-3 shadow-xl
+         bg-white/90 backdrop-blur-lg
+         border-primary/20;
+  animation: wiggle 0.5s ease-in-out infinite;
 }
 
 .logo-animation {
@@ -69,4 +89,47 @@
   100% {
     transform: translateY(0px);
   }
+}
+
+@keyframes wiggle {
+  0%, 100% {
+    transform: rotate(3deg) scale(1.1);
+  }
+  50% {
+    transform: rotate(-3deg) scale(1.1);
+  }
+}
+
+/* Add a trail effect to dragging cards */
+.task-card.dragging::after {
+  content: '';
+  @apply absolute inset-0 rounded-lg;
+  background: inherit;
+  filter: blur(10px);
+  opacity: 0.5;
+  z-index: -1;
+  animation: trail 1s ease-in-out infinite;
+}
+
+@keyframes trail {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(10px) scale(0.95);
+    opacity: 0;
+  }
+}
+
+/* Quadrant hover effect */
+.quadrant:hover {
+  @apply bg-opacity-80 shadow-xl;
+  transform: translateY(-2px);
+}
+
+/* Task card hover effect */
+.task-card:hover {
+  @apply shadow-lg;
+  transform: translateY(-2px) scale(1.02);
 }

@@ -15,6 +15,18 @@ const TaskCard = ({ id, content, onDragStart, onDelete }: TaskCardProps) => {
   const handleDragStart = (e: React.DragEvent) => {
     setIsDragging(true);
     onDragStart(e, id);
+    
+    // Create a custom drag image
+    const dragImage = e.currentTarget.cloneNode(true) as HTMLElement;
+    dragImage.style.transform = 'rotate(3deg) scale(1.1)';
+    dragImage.style.opacity = '0.9';
+    document.body.appendChild(dragImage);
+    e.dataTransfer.setDragImage(dragImage, 0, 0);
+    
+    // Clean up the drag image after dragging
+    requestAnimationFrame(() => {
+      dragImage.remove();
+    });
   };
 
   const handleDragEnd = () => {
@@ -27,7 +39,7 @@ const TaskCard = ({ id, content, onDragStart, onDelete }: TaskCardProps) => {
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
       className={cn(
-        "task-card group",
+        "task-card group relative",
         isDragging && "dragging"
       )}
     >
