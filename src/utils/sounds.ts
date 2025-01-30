@@ -1,21 +1,25 @@
-const dragSound = new Audio('/sounds/drag.mp3');
-const dropSound = new Audio('/sounds/drop.mp3');
-const completeSound = new Audio('/sounds/complete.mp3');
+import { createDragSound, createDropSound, createCompleteSound } from './createSounds';
 
 export const playDragSound = () => {
-  dragSound.currentTime = 0;
-  dragSound.volume = 0.3;
-  dragSound.play().catch(() => {});
+  try {
+    createDragSound();
+  } catch (error) {
+    console.log('Error playing drag sound:', error);
+  }
 };
 
 export const playDropSound = () => {
-  dropSound.currentTime = 0;
-  dropSound.volume = 0.3;
-  dropSound.play().catch(() => {});
+  try {
+    createDropSound();
+  } catch (error) {
+    console.log('Error playing drop sound:', error);
+  }
 };
 
 export const playCompleteSound = () => {
-  completeSound.currentTime = 0;
-  completeSound.volume = 0.4;
-  completeSound.play().catch(() => {});
+  try {
+    createCompleteSound();
+  } catch (error) {
+    console.log('Error playing complete sound:', error);
+  }
 };
