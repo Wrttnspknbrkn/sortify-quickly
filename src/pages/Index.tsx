@@ -54,26 +54,36 @@ const Index = () => {
   }, []);
 
   const handleExport = () => {
-    const exportData = Object.entries(QUADRANTS).reduce((acc, [key, title]) => {
-      const quadrantTasks = tasks
-        .filter(task => task.quadrant === key)
-        .map(({ id, content, completed, elapsedTime }) => ({
-          content,
-          completed,
-          elapsedTime: elapsedTime ? Math.floor(elapsedTime / 1000) : undefined
-        }));
+    let exportText = "QuickSort-It Tasks\n";
+    exportText += `Exported on ${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}\n\n`;
 
-      return {
-        ...acc,
-        [title]: quadrantTasks
-      };
-    }, {});
+    Object.entries(QUADRANTS).forEach(([key, title]) => {
+      const quadrantTasks = tasks.filter(task => task.quadrant === key);
+      
+      exportText += `${title.toUpperCase()}\n`;
+      exportText += "----------------------------------------\n";
+      
+      if (quadrantTasks.length === 0) {
+        exportText += "No tasks in this category\n";
+      } else {
+        quadrantTasks.forEach((task, index) => {
+          exportText += `${index + 1}. ${task.content}\n`;
+          exportText += `   Status: ${task.completed ? "✓ Completed" : "○ Pending"}\n`;
+          if (task.elapsedTime) {
+            const seconds = Math.floor(task.elapsedTime / 1000);
+            exportText += `   Time spent: ${seconds} seconds\n`;
+          }
+          exportText += "\n";
+        });
+      }
+      exportText += "\n";
+    });
 
-    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+    const blob = new Blob([exportText], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `quicksort-tasks-${new Date().toISOString().split('T')[0]}.json`;
+    a.download = `quicksort-tasks-${new Date().toLocaleDateString().replace(/\//g, '-')}.txt`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -81,7 +91,7 @@ const Index = () => {
 
     toast({
       title: "Tasks exported successfully",
-      description: "Your tasks have been downloaded as a JSON file",
+      description: "Your tasks have been downloaded as a text file",
     });
   };
 
