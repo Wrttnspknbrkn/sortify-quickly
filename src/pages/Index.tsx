@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { Layers } from "lucide-react";
+import { Layers, Download } from "lucide-react";
 import Quadrant from "@/components/Quadrant";
 import AddTaskForm from "@/components/AddTaskForm";
 import { Progress } from "@/components/ui/progress";
+import { Button } from "@/components/ui/button";
 import { playDragSound, playDropSound, playCompleteSound } from "@/utils/sounds";
 
 interface Task {
@@ -51,6 +52,38 @@ const Index = () => {
 
     return () => clearInterval(interval);
   }, []);
+
+  const handleExport = () => {
+    const exportData = Object.entries(QUADRANTS).reduce((acc, [key, title]) => {
+      const quadrantTasks = tasks
+        .filter(task => task.quadrant === key)
+        .map(({ id, content, completed, elapsedTime }) => ({
+          content,
+          completed,
+          elapsedTime: elapsedTime ? Math.floor(elapsedTime / 1000) : undefined
+        }));
+
+      return {
+        ...acc,
+        [title]: quadrantTasks
+      };
+    }, {});
+
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `quicksort-tasks-${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    toast({
+      title: "Tasks exported successfully",
+      description: "Your tasks have been downloaded as a JSON file",
+    });
+  };
 
   const handleDragStart = (e: React.DragEvent, id: string) => {
     e.dataTransfer.setData("taskId", id);
@@ -133,18 +166,28 @@ const Index = () => {
   return (
     <div className="min-h-screen p-6 bg-gradient-to-br from-[#F8FAFC] via-[#E5DEFF] to-[#D3E4FD]">
       <div className="max-w-6xl mx-auto">
-        <div className="flex items-center justify-center gap-3 mb-8">
-          <div className="logo-animation">
-            <Layers size={48} className="text-primary" />
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-3">
+            <div className="logo-animation">
+              <Layers size={48} className="text-primary" />
+            </div>
+            <div>
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                QuickSort-It
+              </h1>
+              <p className="text-lg text-muted-foreground">
+                Declutter your life, one decision at a time
+              </p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              QuickSort-It
-            </h1>
-            <p className="text-lg text-muted-foreground">
-              Declutter your life, one decision at a time
-            </p>
-          </div>
+          <Button
+            onClick={handleExport}
+            className="flex items-center gap-2"
+            variant="outline"
+          >
+            <Download size={16} />
+            Export Tasks
+          </Button>
         </div>
         
         <AddTaskForm onAddTask={addTask} />
